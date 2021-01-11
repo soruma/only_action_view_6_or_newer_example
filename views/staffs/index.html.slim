@@ -1,0 +1,13 @@
+h1 Staffs
+
+table
+  tr
+    th #
+    th Name
+    th Position
+
+  - @staffs.each_with_index do |staff, index|
+    tr
+      td = index + 1
+      td = staff[:name]
+      td = staff[:position]
