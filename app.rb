@@ -9,22 +9,15 @@ class App
   end
 
   def html
-    view_context.assign(staffs: Staff.new.execute)
-    view_context.render(template: 'index',
-                        prefixes: 'staffs',
-                        layout: 'layouts/application')
+    view(staffs: Staff.new.execute).render(template: 'index',
+                                           prefixes: 'staffs',
+                                           layout: 'layouts/application')
   end
 
-  def lookup_context
-    return @lookup_context if @lookup_context
-
-    @lookup_context = ::ActionView::LookupContext.new(view_template_path)
-    @lookup_context.cache = false
-    @lookup_context
-  end
-
-  def view_context
-    @view_context ||= ::ActionView::Base.new(lookup_context)
+  def view(assigns)
+    Class.new(
+      ActionView::Base.with_empty_template_cache
+    ).with_view_paths(view_template_path, assigns)
   end
 
   def view_template_path
